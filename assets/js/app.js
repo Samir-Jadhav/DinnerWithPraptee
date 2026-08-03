@@ -31,6 +31,7 @@
   let maybeMessageTimer;
   let lastMaybePosition;
   let maybeIsFloating = false;
+  let maybePlayArea;
   let navigationState = 0;
   const successTimers = [];
   const escapeMessages = [
@@ -301,13 +302,16 @@
     invitationCard?.setAttribute("aria-hidden", "false");
   });
 
-  const getMaybeViewportBounds = () => {
-    const margin = 24;
+  const getMaybePlayAreaBounds = () => {
+    const bounds = maybePlayArea.getBoundingClientRect();
+    const margin = 20;
     return {
       left: margin,
       top: margin,
-      maxX: Math.max(margin, window.innerWidth - maybeButton.offsetWidth - margin),
-      maxY: Math.max(margin, window.innerHeight - maybeButton.offsetHeight - margin)
+      maxX: Math.max(margin, bounds.width - maybeButton.offsetWidth - margin),
+      maxY: Math.max(margin, bounds.height - maybeButton.offsetHeight - margin),
+      frameLeft: bounds.left,
+      frameTop: bounds.top
     };
   };
 
@@ -319,8 +323,11 @@
   };
 
   const makeMaybeButtonFloat = () => {
-    if (!maybeButton || !scene || maybeIsFloating) return;
-    scene.append(maybeButton);
+    if (!maybeButton || !finalStage || maybeIsFloating) return;
+    maybePlayArea = document.createElement("div");
+    maybePlayArea.className = "maybe-play-area";
+    finalStage.append(maybePlayArea);
+    maybePlayArea.append(maybeButton);
     maybeIsFloating = true;
   };
 
@@ -329,6 +336,8 @@
     invitationActions.append(maybeButton);
     maybeButton.classList.remove("is-bouncing", "is-moving");
     ["position", "z-index", "left", "top", "bottom", "transition", "transform", "--maybe-rotation"].forEach((property) => maybeButton.style.removeProperty(property));
+    maybePlayArea?.remove();
+    maybePlayArea = undefined;
     lastMaybePosition = undefined;
     maybeIsFloating = false;
   };
@@ -337,19 +346,18 @@
     if (!maybeButton || !invitationCard || !finalStage?.classList.contains("is-opened") || maybeCooldown) return;
     maybeCooldown = true;
     makeMaybeButtonFloat();
-    maybeButton.style.position = "fixed";
-    maybeButton.style.zIndex = "20";
+    maybeButton.style.position = "absolute";
     maybeButton.style.transition = "left 300ms ease-out, top 300ms ease-out, transform 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out";
     const buttonBounds = maybeButton.getBoundingClientRect();
-    const viewportBounds = getMaybeViewportBounds();
+    const playAreaBounds = getMaybePlayAreaBounds();
     let x = 0;
     let y = 0;
     let foundPosition = false;
 
     for (let attempt = 0; attempt < 60; attempt += 1) {
-      x = viewportBounds.left + Math.random() * (viewportBounds.maxX - viewportBounds.left);
-      y = viewportBounds.top + Math.random() * (viewportBounds.maxY - viewportBounds.top);
-      const candidate = { left: x, right: x + buttonBounds.width, top: y, bottom: y + buttonBounds.height };
+      x = playAreaBounds.left + Math.random() * (playAreaBounds.maxX - playAreaBounds.left);
+      y = playAreaBounds.top + Math.random() * (playAreaBounds.maxY - playAreaBounds.top);
+      const candidate = { left: playAreaBounds.frameLeft + x, right: playAreaBounds.frameLeft + x + buttonBounds.width, top: playAreaBounds.frameTop + y, bottom: playAreaBounds.frameTop + y + buttonBounds.height };
       const repeatsPreviousPosition = lastMaybePosition && Math.hypot(x - lastMaybePosition.x, y - lastMaybePosition.y) < 80;
       if (!repeatsPreviousPosition && !overlapsElement(candidate, backButton) && !overlapsElement(candidate, musicToggle)) {
         foundPosition = true;
@@ -358,8 +366,8 @@
     }
 
     if (!foundPosition) {
-      x = viewportBounds.maxX;
-      y = viewportBounds.maxY;
+      x = playAreaBounds.maxX;
+      y = playAreaBounds.maxY;
     }
 
     lastMaybePosition = { x, y };
@@ -407,18 +415,17 @@
     window.setTimeout(() => { maybeCooldown = false; }, 460);
   };
 
-  const keepMaybeButtonInViewport = () => {
-    if (!maybeButton || maybeButton.style.position !== "fixed") return;
-    const viewportBounds = getMaybeViewportBounds();
-    const x = Math.min(Math.max(viewportBounds.left, Number.parseFloat(maybeButton.style.left) || viewportBounds.left), viewportBounds.maxX);
-    const y = Math.min(Math.max(viewportBounds.top, Number.parseFloat(maybeButton.style.top) || viewportBounds.top), viewportBounds.maxY);
+  const keepMaybeButtonInPlayArea = () => {
+    if (!maybeButton || !maybePlayArea || maybeButton.style.position !== "absolute") return;
+    const playAreaBounds = getMaybePlayAreaBounds();
+    const x = Math.min(Math.max(playAreaBounds.left, Number.parseFloat(maybeButton.style.left) || playAreaBounds.left), playAreaBounds.maxX);
+    const y = Math.min(Math.max(playAreaBounds.top, Number.parseFloat(maybeButton.style.top) || playAreaBounds.top), playAreaBounds.maxY);
     maybeButton.style.left = `${x}px`;
     maybeButton.style.top = `${y}px`;
     lastMaybePosition = { x, y };
   };
 
-  window.addEventListener("resize", keepMaybeButtonInViewport);
-  window.visualViewport?.addEventListener("resize", keepMaybeButtonInViewport);
+  window.addEventListener("resize", keepMaybeButtonInPlayArea);
   finalStage && new MutationObserver(() => {
     if (!finalStage.classList.contains("is-opened")) returnMaybeButtonHome();
   }).observe(finalStage, { attributes: true, attributeFilter: ["class"] });

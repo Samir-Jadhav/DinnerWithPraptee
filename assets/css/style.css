@@ -558,6 +558,8 @@ body {
 .invitation-maybe { position: absolute; z-index: 3; left: 50%; bottom: 30px; width: auto; max-width: 170px; min-width: 0; min-height: 48px; height: 48px; padding: 12px 22px; font-size: 15px; transform: translateX(-50%) rotate(0deg); }
 .invitation-maybe.is-moving { box-shadow: 0 0 18px rgba(212, 175, 55, 0.48); }
 .invitation-maybe.is-bouncing { animation: maybeLanding 450ms var(--ease); }
+.maybe-play-area { position: absolute; z-index: 20; top: 15%; left: 10%; width: 80%; height: 70%; pointer-events: none; }
+.maybe-play-area .invitation-maybe { pointer-events: auto; }
 .maybe-message-slot { display: grid; min-height: 44px; margin: 30px 0; place-items: center; }
 .maybe-escape-message { position: relative; z-index: 4; width: fit-content; max-width: 340px; margin: 0; padding: 10px 22px; border: 1px solid rgba(185, 140, 59, 0.7); border-radius: 999px; background: rgba(25, 20, 14, 0.72); box-shadow: 0 0 14px rgba(212, 175, 55, 0.16), 0 8px 18px rgba(0, 0, 0, 0.2); color: var(--gold-bright); font: 500 0.78rem "Jost", sans-serif; line-height: 1.2; opacity: 0; pointer-events: none; text-align: center; transform: translateY(7px); transition: opacity 300ms ease, transform 300ms ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .maybe-escape-message.is-visible { opacity: 1; transform: translateY(0); }
@@ -579,7 +581,7 @@ body {
 .final-stage.is-accepted .invitation-card { opacity: 0; pointer-events: none; transition: opacity 600ms var(--ease); }
 .final-stage.is-success-faded .envelope-scene,
 .final-stage.is-success-faded .invitation-card { display: none; }
-.scene.is-celebrating > .invitation-maybe { display: none; }
+.final-stage.is-accepted .maybe-play-area { display: none; }
 .final-stage.is-accepted .thank-you { opacity: 1; transform: translateY(0); }
 .final-stage.is-declined .envelope-scene,
 .final-stage.is-declined .invitation-card { opacity: 0; transform: translateY(-20px) scale(0.98); pointer-events: none; transition-delay: 0s; }
