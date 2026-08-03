@@ -1,0 +1,84 @@
+@media (max-width: 900px) {
+  .glass-card {
+    width: min(80vw, 760px);
+    padding: 34px 28px 40px;
+  }
+
+  .top-decoration span {
+    width: 90px;
+  }
+
+  .eyebrow {
+    letter-spacing: 0.48rem;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    overflow: auto;
+  }
+
+  .hero {
+    padding: 30px 14px;
+  }
+
+  .glass-card {
+    width: min(92vw, 440px);
+    min-height: 500px;
+    padding: 28px 18px 28px;
+    border-radius: 24px;
+  }
+
+  .glass-card::before {
+    inset: 12px;
+    border-radius: 16px;
+  }
+
+  .top-decoration {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .top-decoration span {
+    width: 56px;
+  }
+
+  .eyebrow {
+    letter-spacing: 0.28rem;
+    font-size: 0.56rem;
+  }
+
+  .title-hi {
+    font-size: clamp(2.8rem, 12vw, 4rem);
+  }
+
+  h1 {
+    font-size: clamp(4.8rem, 24vw, 7rem);
+    letter-spacing: -0.05em;
+  }
+
+  .divider {
+    gap: 10px;
+    margin: 18px 0 20px;
+  }
+
+  .divider span {
+    width: 70px;
+  }
+
+  .subtitle {
+    letter-spacing: 0.04em;
+  }
+
+  .ready {
+    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+  }
+
+  .open-button {
+    width: 184px;
+    height: 52px;
+    letter-spacing: 0.26em;
+    font-size: 0.68rem;
+  }
+}

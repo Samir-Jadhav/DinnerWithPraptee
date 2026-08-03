@@ -1,0 +1,94 @@
+@keyframes revealHero {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes spotlightPulse {
+  0% {
+    opacity: 0.78;
+    transform: translateX(-50%) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@keyframes mistDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.24;
+  }
+  100% {
+    transform: translate3d(34px, -12px, 0) scale(1.06);
+    opacity: 0.48;
+  }
+}
+
+@keyframes starsShift {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(34px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  30%, 100% {
+    transform: translateX(150%) skewX(-18deg);
+  }
+}
+
+@keyframes glassGlow {
+  0% { opacity: 0.35; }
+  100% { opacity: 0.7; }
+}
+
+.hero {
+  animation: revealHero 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.glass-card {
+  animation: floatCard 12s ease-in-out infinite;
+}
+
+.glass-card::after {
+  animation: glassGlow 8s ease-in-out infinite alternate;
+}
+
+.top-decoration,
+.title-wrap,
+.divider,
+.subtitle,
+.ready,
+.open-button {
+  animation: revealHero 1.2s ease both;
+}
+
+.top-decoration { animation-delay: 0.1s; }
+.title-wrap { animation-delay: 0.15s; }
+.divider { animation-delay: 0.35s; }
+.subtitle { animation-delay: 0.45s; }
+.ready { animation-delay: 0.6s; }
+.open-button { animation-delay: 0.75s; }

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dinner With Praptee â€” a cinematic luxury invitation landing page." />
+    <title>Hi Praptee</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div class="scene">
+      <button class="music-toggle" type="button" aria-pressed="false" aria-label="Turn background music on">
+        <span class="music-toggle__icon" aria-hidden="true">♫</span>
+        <span class="music-toggle__label">Music Off</span>
+      </button>
+      <!-- background layers -->
+      <div class="bg" aria-hidden="true">
+        <div class="bg__glow"></div>
+        <div class="bg__beam"></div>
+        <div class="bg__rays"></div>
+        <canvas id="stars"></canvas>
+        <div class="bg__vignette"></div>
+      </div>
+
+      <!-- card -->
+      <main class="card-wrap">
+        <section class="card" aria-label="Dinner with Praptee invitation">
+          <button class="back-button" type="button" aria-label="Return to the previous screen">
+            <span aria-hidden="true">&larr;</span>
+          </button>
+          <div class="ornament ornament--top" aria-hidden="true">
+            <span class="ornament__dot"></span>
+            <span class="ornament__line"></span>
+            <svg class="ornament__heart" viewBox="0 0 24 22" fill="none">
+              <path d="M12 20C12 20 2 13.6 2 7.2 2 3.8 4.6 1.5 7.8 1.5c2 0 3.5 1 4.2 2.4.7-1.4 2.2-2.4 4.2-2.4 3.2 0 5.8 2.3 5.8 5.7 0 6.4-10 12.8-10 12.8Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/>
+            </svg>
+            <span class="ornament__line"></span>
+            <span class="ornament__dot"></span>
+          </div>
+
+          <div class="title">
+            <p class="title__hi">Hi</p>
+            <h1 class="title__name">Praptee</h1>
+          </div>
+
+          <div class="ornament ornament--bottom" aria-hidden="true">
+            <span class="ornament__dot"></span>
+            <span class="ornament__line"></span>
+            <svg class="ornament__spark" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 0c.6 4.6 1.9 7.5 5 8.5-3.1 1-4.4 3.9-5 8.5-.6-4.6-1.9-7.5-5-8.5 3.1-1 4.4-3.9 5-8.5Z"/>
+            </svg>
+            <span class="ornament__line"></span>
+            <span class="ornament__dot"></span>
+          </div>
+
+          <p class="message">I made something for you.</p>
+          <p class="message message--muted">Whenever you're ready&hellip;</p>
+
+          <button class="open-btn" type="button">
+            <span>Open</span>
+          </button>
+
+          <div class="message-screen" data-message-screen="0" aria-live="polite" aria-hidden="true">
+            <div class="message-screen__copy">
+              <p>Eight years gave us countless memories.</p>
+              <p>Life took us in different directions.</p>
+              <p>But there is one evening I still hope we can share.</p>
+            </div>
+            <button class="message-next" type="button" aria-label="Continue to the next message">
+              <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+
+          <div class="message-screen" data-message-screen="1" aria-live="polite" aria-hidden="true">
+            <div class="message-screen__copy">
+              <p>Some invitations are ordinary.</p>
+              <p>This one means the world to me.</p>
+              <p>I hope you'll say yes.</p>
+            </div>
+            <button class="message-next" type="button" aria-label="Continue to the dinner invitation">
+              <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+
+          <div class="message-screen message-screen--final" data-message-screen="2" aria-live="polite" aria-hidden="true">
+            <div class="final-stage">
+              <p class="final-stage__eyebrow">One last thing&hellip;</p>
+
+              <div class="envelope-scene">
+                <div class="envelope" aria-label="A sealed dinner invitation envelope">
+                  <span class="envelope__reflection" aria-hidden="true"></span>
+                  <span class="envelope__back" aria-hidden="true"></span>
+                  <span class="envelope__flap" aria-hidden="true"></span>
+                  <span class="envelope__front" aria-hidden="true"></span>
+                  <button class="wax-seal" type="button" aria-label="Open the invitation seal">
+                    <svg viewBox="0 0 24 22" aria-hidden="true">
+                      <path d="M12 20C12 20 2 13.6 2 7.2 2 3.8 4.6 1.5 7.8 1.5c2 0 3.5 1 4.2 2.4.7-1.4 2.2-2.4 4.2-2.4 3.2 0 5.8 2.3 5.8 5.7 0 6.4-10 12.8-10 12.8Z" />
+                    </svg>
+                  </button>
+                </div>
+                <p class="envelope-scene__instruction">Click the seal</p>
+              </div>
+
+              <article class="invitation-card" aria-hidden="true">
+                <p class="invitation-card__title">Dinner Invitation</p>
+                <p class="invitation-card__dear">Dear Praptee,</p>
+                <p class="invitation-card__message">There is one special evening<br>I&rsquo;d love to share with you.</p>
+                <p class="invitation-card__question">Will you have dinner with me?</p>
+                <div class="invitation-card__details">
+                  <p>&#128197; 15 August 2026</p>
+                  <p>&#128345; 7:00 PM IST</p>
+                  <p>&#128205; Restaurant Name</p>
+                </div>
+                <div class="maybe-message-slot">
+                  <p class="maybe-escape-message" aria-live="polite"></p>
+                </div>
+                <div class="invitation-actions">
+                  <button class="invitation-yes" type="button">&#10084;&#65039; Yes, I&rsquo;d love to</button>
+                </div>
+                <button class="invitation-maybe" type="button">&#129293; Maybe not</button>
+              </article>
+
+              <div class="success-celebration" aria-hidden="true">
+                <p>&#10084;&#65039; Yay!</p>
+                <span>I had a feeling<br>you&rsquo;d click &ldquo;Yes.&rdquo; &#128522;</span>
+              </div>
+              <div class="success-final" aria-hidden="true">
+                <p>&#10084;&#65039; I just received your response.</p>
+                <p>Which means&hellip; you clicked &ldquo;Yes.&rdquo; &#128522;</p>
+                <p>I&rsquo;ll pick you up at 7:00 PM.</p>
+                <p>Please be ready.</p>
+                <p>See you soon. &#10084;&#65039;</p>
+              </div>
+              <p class="success-status" aria-hidden="true">&#128994; Your response has been received successfully.</p>
+              <div class="heart-particles" aria-hidden="true"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer-credit">Made with <span aria-hidden="true">&#10084;&#65039;</span> by Samir</footer>
+    <div class="gold-cursor" aria-hidden="true"></div>
+
+    <audio id="sound-click" preload="auto" src="assets/audio/click.mp3"></audio>
+    <audio id="sound-envelope" preload="auto" src="assets/audio/envelope-open.mp3"></audio>
+    <audio id="sound-wax" preload="auto" src="assets/audio/wax-crack.mp3"></audio>
+    <audio id="sound-whoosh" preload="auto" src="assets/audio/whoosh.mp3"></audio>
+    <audio id="sound-success" preload="auto" src="assets/audio/success-chime.mp3"></audio>
+    <audio id="background-music" preload="auto" loop src="assets/audio/piano.mp3"></audio>
+
+    <script src="assets/js/stars.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
