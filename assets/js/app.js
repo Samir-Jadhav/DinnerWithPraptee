@@ -29,6 +29,7 @@
   };
   let maybeCooldown = false;
   let maybeMessageTimer;
+  let lastMaybePosition;
   let navigationState = 0;
   const successTimers = [];
   const escapeMessages = [
@@ -299,31 +300,58 @@
     invitationCard?.setAttribute("aria-hidden", "false");
   });
 
+  const getMaybeViewportBounds = (buttonBounds) => {
+    const viewport = window.visualViewport;
+    const margin = 20;
+    const left = (viewport?.offsetLeft || 0) + margin;
+    const top = (viewport?.offsetTop || 0) + margin;
+    const width = viewport?.width || window.innerWidth;
+    const height = viewport?.height || window.innerHeight;
+    return {
+      left,
+      top,
+      maxX: Math.max(left, left + width - buttonBounds.width - margin),
+      maxY: Math.max(top, top + height - buttonBounds.height - margin)
+    };
+  };
+
+  const overlapsElement = (candidate, element) => {
+    if (!element || element.getClientRects().length === 0) return false;
+    const bounds = element.getBoundingClientRect();
+    const clearance = 12;
+    return candidate.left < bounds.right + clearance && candidate.right > bounds.left - clearance && candidate.top < bounds.bottom + clearance && candidate.bottom > bounds.top - clearance;
+  };
+
   const moveMaybeButton = () => {
     if (!maybeButton || !invitationCard || !finalStage?.classList.contains("is-opened") || maybeCooldown) return;
     maybeCooldown = true;
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    if (isMobile) maybeButton.style.position = "absolute";
-    const cardBounds = invitationCard.getBoundingClientRect();
+    maybeButton.style.position = "fixed";
+    maybeButton.style.zIndex = "20";
+    maybeButton.style.transition = "left 300ms ease-out, top 300ms ease-out, transform 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out";
     const buttonBounds = maybeButton.getBoundingClientRect();
-    const yesBounds = yesButton?.getBoundingClientRect();
-    const padding = isMobile ? 12 : 40;
-    const maxX = Math.max(padding, cardBounds.width - buttonBounds.width - padding);
-    const maxY = Math.max(padding, cardBounds.height - buttonBounds.height - padding);
-    const messageBottom = maybeMessageSlot ? maybeMessageSlot.getBoundingClientRect().bottom - cardBounds.top + 16 : padding;
-    const minY = isMobile ? Math.min(Math.max(padding, messageBottom), maxY) : padding;
+    const viewportBounds = getMaybeViewportBounds(buttonBounds);
     let x = 0;
     let y = 0;
+    let foundPosition = false;
 
-    for (let attempt = 0; attempt < 40; attempt += 1) {
-      x = padding + Math.random() * (maxX - padding);
-      y = minY + Math.random() * (maxY - minY);
-      const candidate = { left: cardBounds.left + x, right: cardBounds.left + x + buttonBounds.width, top: cardBounds.top + y, bottom: cardBounds.top + y + buttonBounds.height };
-      const overlapsYes = yesBounds && candidate.left < yesBounds.right + 12 && candidate.right > yesBounds.left - 12 && candidate.top < yesBounds.bottom + 12 && candidate.bottom > yesBounds.top - 12;
-      if (!overlapsYes) break;
+    for (let attempt = 0; attempt < 60; attempt += 1) {
+      x = viewportBounds.left + Math.random() * (viewportBounds.maxX - viewportBounds.left);
+      y = viewportBounds.top + Math.random() * (viewportBounds.maxY - viewportBounds.top);
+      const candidate = { left: x, right: x + buttonBounds.width, top: y, bottom: y + buttonBounds.height };
+      const repeatsPreviousPosition = lastMaybePosition && Math.hypot(x - lastMaybePosition.x, y - lastMaybePosition.y) < 80;
+      if (!repeatsPreviousPosition && !overlapsElement(candidate, backButton) && !overlapsElement(candidate, musicToggle)) {
+        foundPosition = true;
+        break;
+      }
     }
 
-    const rotation = -6 + Math.random() * 12;
+    if (!foundPosition) {
+      x = viewportBounds.maxX;
+      y = viewportBounds.maxY;
+    }
+
+    lastMaybePosition = { x, y };
+    const rotation = -8 + Math.random() * 16;
     maybeButton.style.left = `${x}px`;
     maybeButton.style.top = `${y}px`;
     maybeButton.style.bottom = "auto";
@@ -367,20 +395,19 @@
     window.setTimeout(() => { maybeCooldown = false; }, 460);
   };
 
-  const keepMaybeButtonInCard = () => {
-    if (!maybeButton || !invitationCard || maybeButton.style.position !== "absolute") return;
-    const cardBounds = invitationCard.getBoundingClientRect();
+  const keepMaybeButtonInViewport = () => {
+    if (!maybeButton || maybeButton.style.position !== "fixed") return;
     const buttonBounds = maybeButton.getBoundingClientRect();
-    const padding = window.matchMedia("(max-width: 767px)").matches ? 12 : 40;
-    const maxX = Math.max(padding, cardBounds.width - buttonBounds.width - padding);
-    const maxY = Math.max(padding, cardBounds.height - buttonBounds.height - padding);
-    const messageBottom = maybeMessageSlot ? maybeMessageSlot.getBoundingClientRect().bottom - cardBounds.top + 16 : padding;
-    const minY = window.matchMedia("(max-width: 767px)").matches ? Math.min(Math.max(padding, messageBottom), maxY) : padding;
-    maybeButton.style.left = `${Math.min(Math.max(padding, Number.parseFloat(maybeButton.style.left) || padding), maxX)}px`;
-    maybeButton.style.top = `${Math.min(Math.max(minY, Number.parseFloat(maybeButton.style.top) || minY), maxY)}px`;
+    const viewportBounds = getMaybeViewportBounds(buttonBounds);
+    const x = Math.min(Math.max(viewportBounds.left, Number.parseFloat(maybeButton.style.left) || viewportBounds.left), viewportBounds.maxX);
+    const y = Math.min(Math.max(viewportBounds.top, Number.parseFloat(maybeButton.style.top) || viewportBounds.top), viewportBounds.maxY);
+    maybeButton.style.left = `${x}px`;
+    maybeButton.style.top = `${y}px`;
+    lastMaybePosition = { x, y };
   };
 
-  window.addEventListener("resize", keepMaybeButtonInCard);
+  window.addEventListener("resize", keepMaybeButtonInViewport);
+  window.visualViewport?.addEventListener("resize", keepMaybeButtonInViewport);
 
   invitationCard?.addEventListener("pointermove", (event) => {
     if (!maybeButton) return;
