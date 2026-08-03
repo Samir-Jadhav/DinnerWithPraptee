@@ -400,10 +400,13 @@
       successFinal?.setAttribute("aria-hidden", "false");
       successFinal?.classList.add("is-revealing");
     }, 6900);
-    scheduleSuccess(() => {
-      successStatus?.setAttribute("aria-hidden", "false");
-      successStatus?.classList.add("is-visible");
-    }, 11800);
+   scheduleSuccess(() => {
+    successStatus?.setAttribute("aria-hidden", "false");
+    successStatus?.classList.add("is-visible");
+
+    sendTelegramNotification();
+
+}, 11800)
 
     const particleLayer = document.querySelector(".heart-particles");
     if (!particleLayer) return;
@@ -420,3 +423,37 @@
     }
   });
 })();
+async function sendTelegramNotification() {
+
+    try {
+
+        await fetch('/api/sendTelegram', {
+
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+
+                time: new Date().toLocaleString('en-IN', {
+
+                    dateStyle: 'full',
+                    timeStyle: 'medium'
+
+                })
+
+            })
+
+        });
+
+        console.log("Telegram notification sent ❤️");
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+}
