@@ -497,7 +497,7 @@
     thankYouText.textContent = "I'm really looking forward to seeing you.";
     thankYou?.setAttribute("aria-hidden", "false");
     window.dispatchEvent(new Event("invitation:celebrate"));
-    thankYouTitle.innerHTML = "&#10084;&#65039; Yay!";
+    thankYouTitle.innerHTML = '<span class="success-celebration__heart">&#10084;&#65039;</span><span class="success-celebration__yay">Yay!</span>';
     thankYouText.innerHTML = "I had a feeling<br>you'd click &ldquo;Yes.&rdquo; &#128522;";
     scheduleSuccess(() => finalStage?.classList.add("is-success-faded"), 600);
     scheduleSuccess(() => thankYou?.classList.add("is-visible"), 600);

@@ -669,11 +669,13 @@ body {
 
 .success-celebration,
 .success-final { position: absolute; z-index: 10; text-align: center; pointer-events: none; }
-.success-celebration { display: grid; gap: 12px; opacity: 0; transform: scale(0.82) translateY(18px); transition: opacity 500ms var(--ease), transform 700ms var(--ease); }
+.success-celebration { display: flex; width: min(92%, 520px); padding: 28px 24px 32px; flex-direction: column; align-items: center; justify-content: center; gap: 24px; opacity: 0; transform: scale(0.82) translateY(18px); translate: 0 36px; transition: opacity 500ms var(--ease), transform 700ms var(--ease); }
 .success-celebration.is-visible { opacity: 1; transform: scale(1) translateY(0); animation: celebrationBounce 900ms var(--ease) both; }
 .success-celebration.is-leaving { opacity: 0; transform: scale(0.96) translateY(-12px); transition-duration: 1200ms; }
-.success-celebration p { background: linear-gradient(180deg, #fff3cc 0%, #d4af37 55%, #f8ecc8 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font: 400 clamp(3.4rem, 8vw, 6.2rem) "Great Vibes", cursive; line-height: 0.9; text-shadow: 0 0 30px rgba(212, 175, 55, 0.28); }
-.success-celebration span { color: var(--gold-bright); font: 500 clamp(1.5rem, 3.2vw, 2.45rem) "Cormorant Garamond", serif; line-height: 1.15; text-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+.success-celebration p { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 0; padding-top: 0.16em; font: 400 clamp(3.4rem, 8vw, 6.2rem) "Great Vibes", cursive; line-height: 1.12; overflow: visible; }
+.success-celebration__heart { flex: 0 0 auto; font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif; font-size: 0.85em; line-height: 1; }
+.success-celebration__yay { display: block; padding-top: 0.06em; background: linear-gradient(180deg, #fff3cc 0%, #d4af37 55%, #f8ecc8 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 30px rgba(212, 175, 55, 0.28); }
+.success-celebration > span { display: block; width: min(100%, 420px); color: #fff7e8; font: 500 clamp(1.2rem, 2.56vw, 1.96rem) "Cormorant Garamond", serif; line-height: 1.4; text-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
 
 .success-final { display: grid; gap: 12px; width: min(86%, 620px); opacity: 0; }
 .success-final.is-revealing { opacity: 1; }
@@ -726,7 +728,7 @@ body {
   .invitation-maybe { bottom: 20px; }
   .success-celebration { width: min(88%, 340px); }
   .success-celebration p { font-size: clamp(3rem, 16vw, 4.2rem); }
-  .success-celebration span { font-size: clamp(1.35rem, 6.4vw, 1.8rem); }
+  .success-celebration > span { font-size: clamp(1.08rem, 5.12vw, 1.44rem); }
   .success-final { width: min(88%, 360px); }
   .success-final p { font-size: clamp(1.08rem, 5.1vw, 1.28rem); line-height: 1.72; }
   .success-final p:first-child { font-size: clamp(1.75rem, 8.1vw, 2.2rem); line-height: 1.35; }
