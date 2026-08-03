@@ -30,6 +30,7 @@
   let maybeCooldown = false;
   let maybeMessageTimer;
   let lastMaybePosition;
+  let maybeIsFloating = false;
   let navigationState = 0;
   const successTimers = [];
   const escapeMessages = [
@@ -301,7 +302,7 @@
   });
 
   const getMaybeViewportBounds = () => {
-    const margin = 20;
+    const margin = 24;
     return {
       left: margin,
       top: margin,
@@ -317,9 +318,25 @@
     return candidate.left < bounds.right + clearance && candidate.right > bounds.left - clearance && candidate.top < bounds.bottom + clearance && candidate.bottom > bounds.top - clearance;
   };
 
+  const makeMaybeButtonFloat = () => {
+    if (!maybeButton || !scene || maybeIsFloating) return;
+    scene.append(maybeButton);
+    maybeIsFloating = true;
+  };
+
+  const returnMaybeButtonHome = () => {
+    if (!maybeButton || !invitationActions || !maybeIsFloating) return;
+    invitationActions.append(maybeButton);
+    maybeButton.classList.remove("is-bouncing", "is-moving");
+    ["position", "z-index", "left", "top", "bottom", "transition", "transform", "--maybe-rotation"].forEach((property) => maybeButton.style.removeProperty(property));
+    lastMaybePosition = undefined;
+    maybeIsFloating = false;
+  };
+
   const moveMaybeButton = () => {
     if (!maybeButton || !invitationCard || !finalStage?.classList.contains("is-opened") || maybeCooldown) return;
     maybeCooldown = true;
+    makeMaybeButtonFloat();
     maybeButton.style.position = "fixed";
     maybeButton.style.zIndex = "20";
     maybeButton.style.transition = "left 300ms ease-out, top 300ms ease-out, transform 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out";
@@ -402,6 +419,9 @@
 
   window.addEventListener("resize", keepMaybeButtonInViewport);
   window.visualViewport?.addEventListener("resize", keepMaybeButtonInViewport);
+  finalStage && new MutationObserver(() => {
+    if (!finalStage.classList.contains("is-opened")) returnMaybeButtonHome();
+  }).observe(finalStage, { attributes: true, attributeFilter: ["class"] });
 
   invitationCard?.addEventListener("pointermove", (event) => {
     if (!maybeButton) return;
