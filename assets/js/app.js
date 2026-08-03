@@ -222,7 +222,7 @@
   const resetSuccessScreen = () => {
     successTimers.forEach((timer) => window.clearTimeout(timer));
     successTimers.length = 0;
-    finalStage?.classList.remove("is-accepted");
+    finalStage?.classList.remove("is-accepted", "is-success-faded");
     scene?.classList.remove("is-celebrating");
     thankYou?.classList.remove("is-visible", "is-leaving");
     thankYou?.setAttribute("aria-hidden", "true");
@@ -451,6 +451,7 @@
     window.dispatchEvent(new Event("invitation:celebrate"));
     thankYouTitle.innerHTML = "&#10084;&#65039; Yay!";
     thankYouText.innerHTML = "I had a feeling<br>you'd click &ldquo;Yes.&rdquo; &#128522;";
+    scheduleSuccess(() => finalStage?.classList.add("is-success-faded"), 600);
     scheduleSuccess(() => thankYou?.classList.add("is-visible"), 600);
     scheduleSuccess(() => playSound("success", 0.24), 700);
     scheduleSuccess(() => thankYou?.classList.add("is-leaving"), 5100);

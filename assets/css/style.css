@@ -576,7 +576,9 @@ body {
 .final-stage.is-opened .final-stage__eyebrow { opacity: 0; transform: translateY(-20px); }
 .final-stage.is-opened .invitation-card { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
 .final-stage.is-accepted .envelope-scene,
-.final-stage.is-accepted .invitation-card { opacity: 0; transform: translateY(-20px) scale(0.98); pointer-events: none; transition-delay: 0s; }
+.final-stage.is-accepted .invitation-card { opacity: 0; pointer-events: none; transition: opacity 600ms var(--ease); }
+.final-stage.is-success-faded .envelope-scene,
+.final-stage.is-success-faded .invitation-card { display: none; }
 .final-stage.is-accepted .thank-you { opacity: 1; transform: translateY(0); }
 .final-stage.is-declined .envelope-scene,
 .final-stage.is-declined .invitation-card { opacity: 0; transform: translateY(-20px) scale(0.98); pointer-events: none; transition-delay: 0s; }
@@ -791,41 +793,60 @@ body {
 
 @media (max-width: 767px) {
   .invitation-card {
-    padding: 20px 18px 24px;
+    width: min(92vw, 520px);
+    height: min(90svh, 100%);
+    max-height: 90svh;
+    padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .invitation-card__title {
+    font-size: 1.55rem;
   }
 
   .invitation-card__dear {
-    margin-top: 12px;
+    margin-top: 8px;
+    font-size: 1.08rem;
   }
 
   .invitation-card__message {
-    margin-top: 8px;
+    margin-top: 6px;
+    font-size: 1.1rem;
   }
 
   .invitation-card__question {
-    margin-top: 10px;
+    margin-top: 8px;
+    font-size: 1.35rem;
   }
 
   .invitation-card__details {
-    margin: 14px 0;
+    gap: 3px;
+    margin: 10px 0;
+    font-size: 0.74rem;
   }
 
   .maybe-message-slot {
-    margin: 14px 0;
+    min-height: 32px;
+    margin: 8px 0;
   }
 
   .invitation-actions {
     display: flex;
-    min-height: 0;
+    min-height: 100px;
     padding-bottom: 0;
+    margin-top: auto;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .invitation-yes,
   .invitation-maybe {
-    width: min(100%, 260px);
+    width: min(100%, 280px);
+    min-height: 44px;
   }
 
   .invitation-maybe {
