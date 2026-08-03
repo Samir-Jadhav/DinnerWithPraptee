@@ -9,6 +9,7 @@
   const yesButton = document.querySelector(".invitation-yes");
   const maybeButton = document.querySelector(".invitation-maybe");
   const invitationActions = document.querySelector(".invitation-actions");
+  const maybeMessageSlot = document.querySelector(".maybe-message-slot");
   const maybeMessage = document.querySelector(".maybe-escape-message");
   const thankYou = document.querySelector(".success-celebration");
   const thankYouTitle = thankYou?.querySelector("p");
@@ -127,22 +128,62 @@
     sound.play().catch(() => {});
   };
 
+  let musicRequested = false;
+  let musicRetryPending = false;
+
+  const setMusicToggleState = (isPlaying) => {
+    if (!musicToggle) return;
+    musicToggle.classList.toggle("is-playing", isPlaying);
+    musicToggle.setAttribute("aria-pressed", String(isPlaying));
+    musicToggle.setAttribute("aria-label", isPlaying ? "Turn background music off" : "Turn background music on");
+    musicToggle.querySelector(".music-toggle__label").textContent = isPlaying ? "Music On" : "Music Off";
+  };
+
+  const playBackgroundMusic = () => {
+    if (!music || !musicRequested) return;
+    music.volume = 0.18;
+    music.loop = true;
+    music.play().then(() => {
+      musicRetryPending = false;
+      setMusicToggleState(true);
+    }).catch((error) => {
+      musicRetryPending = true;
+      setMusicToggleState(false);
+      console.error("Background music playback was blocked. It will retry after the next interaction.", error);
+    });
+  };
+
+  if (music) {
+    music.volume = 0.18;
+    music.loop = true;
+    music.addEventListener("error", () => {
+      musicRetryPending = false;
+      const source = music.currentSrc || music.src;
+      console.error(`Background music failed to load: ${source}`, music.error);
+    });
+    music.addEventListener("playing", () => setMusicToggleState(true));
+    music.addEventListener("pause", () => {
+      if (!musicRequested) setMusicToggleState(false);
+    });
+  }
+
   musicToggle?.addEventListener("click", () => {
     if (!music) return;
-    if (music.paused) {
-      music.volume = 0.18;
-      music.play().then(() => {
-        musicToggle.classList.add("is-playing");
-        musicToggle.setAttribute("aria-pressed", "true");
-        musicToggle.querySelector(".music-toggle__label").textContent = "Music On";
-      }).catch(() => {});
-    } else {
+    if (musicRequested) {
+      musicRequested = false;
+      musicRetryPending = false;
       music.pause();
-      musicToggle.classList.remove("is-playing");
-      musicToggle.setAttribute("aria-pressed", "false");
-      musicToggle.querySelector(".music-toggle__label").textContent = "Music Off";
+      setMusicToggleState(false);
+      return;
     }
+
+    musicRequested = true;
+    playBackgroundMusic();
   });
+
+  document.addEventListener("pointerdown", () => {
+    if (musicRetryPending && musicRequested) playBackgroundMusic();
+  }, { capture: true });
 
   if (window.matchMedia("(pointer: fine)").matches && cursor) {
     let lastTrail = 0;
@@ -261,18 +302,22 @@
   const moveMaybeButton = () => {
     if (!maybeButton || !invitationCard || !finalStage?.classList.contains("is-opened") || maybeCooldown) return;
     maybeCooldown = true;
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (isMobile) maybeButton.style.position = "absolute";
     const cardBounds = invitationCard.getBoundingClientRect();
     const buttonBounds = maybeButton.getBoundingClientRect();
     const yesBounds = yesButton?.getBoundingClientRect();
-    const padding = 40;
+    const padding = isMobile ? 12 : 40;
     const maxX = Math.max(padding, cardBounds.width - buttonBounds.width - padding);
     const maxY = Math.max(padding, cardBounds.height - buttonBounds.height - padding);
+    const messageBottom = maybeMessageSlot ? maybeMessageSlot.getBoundingClientRect().bottom - cardBounds.top + 16 : padding;
+    const minY = isMobile ? Math.min(Math.max(padding, messageBottom), maxY) : padding;
     let x = 0;
     let y = 0;
 
     for (let attempt = 0; attempt < 40; attempt += 1) {
       x = padding + Math.random() * (maxX - padding);
-      y = padding + Math.random() * (maxY - padding);
+      y = minY + Math.random() * (maxY - minY);
       const candidate = { left: cardBounds.left + x, right: cardBounds.left + x + buttonBounds.width, top: cardBounds.top + y, bottom: cardBounds.top + y + buttonBounds.height };
       const overlapsYes = yesBounds && candidate.left < yesBounds.right + 12 && candidate.right > yesBounds.left - 12 && candidate.top < yesBounds.bottom + 12 && candidate.bottom > yesBounds.top - 12;
       if (!overlapsYes) break;
@@ -321,6 +366,21 @@
 
     window.setTimeout(() => { maybeCooldown = false; }, 460);
   };
+
+  const keepMaybeButtonInCard = () => {
+    if (!maybeButton || !invitationCard || maybeButton.style.position !== "absolute") return;
+    const cardBounds = invitationCard.getBoundingClientRect();
+    const buttonBounds = maybeButton.getBoundingClientRect();
+    const padding = window.matchMedia("(max-width: 767px)").matches ? 12 : 40;
+    const maxX = Math.max(padding, cardBounds.width - buttonBounds.width - padding);
+    const maxY = Math.max(padding, cardBounds.height - buttonBounds.height - padding);
+    const messageBottom = maybeMessageSlot ? maybeMessageSlot.getBoundingClientRect().bottom - cardBounds.top + 16 : padding;
+    const minY = window.matchMedia("(max-width: 767px)").matches ? Math.min(Math.max(padding, messageBottom), maxY) : padding;
+    maybeButton.style.left = `${Math.min(Math.max(padding, Number.parseFloat(maybeButton.style.left) || padding), maxX)}px`;
+    maybeButton.style.top = `${Math.min(Math.max(minY, Number.parseFloat(maybeButton.style.top) || minY), maxY)}px`;
+  };
+
+  window.addEventListener("resize", keepMaybeButtonInCard);
 
   invitationCard?.addEventListener("pointermove", (event) => {
     if (!maybeButton) return;

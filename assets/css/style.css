@@ -549,7 +549,7 @@ body {
 .invitation-card__question { margin-top: 15px; color: #694c1e; font: 600 clamp(1.55rem, 3.2vw, 1.95rem) "Cormorant Garamond", serif; line-height: 1.15; }
 .invitation-card__details { display: grid; gap: 5px; margin: 22px 0; color: #5a4730; font: 400 0.94rem "Jost", sans-serif; }
 
-.invitation-actions { position: relative; min-height: 50px; padding-bottom: 78px; display: grid; align-items: center; }
+.invitation-actions { min-height: 50px; padding-bottom: 78px; display: grid; align-items: center; }
 .invitation-yes,
 .invitation-maybe { min-height: 50px; border-radius: 999px; border: 1px solid #b89042; background: rgba(255, 255, 255, 0.2); color: #5d431e; font: 500 0.82rem "Jost", sans-serif; cursor: pointer; transition: left 400ms var(--ease), top 400ms var(--ease), transform 400ms var(--ease), box-shadow 300ms var(--ease), background 300ms var(--ease); }
 .invitation-yes { box-shadow: 0 0 14px rgba(212, 175, 55, 0.22); }
@@ -787,6 +787,53 @@ body {
   .back-button { top: 16px; left: 16px; }
   .footer-credit { bottom: 11px; font-size: 0.62rem; }
   .final-stage.is-accepted .thank-you { padding: 22px 18px; }
+}
+
+@media (max-width: 767px) {
+  .invitation-card {
+    padding: 20px 18px 24px;
+  }
+
+  .invitation-card__dear {
+    margin-top: 12px;
+  }
+
+  .invitation-card__message {
+    margin-top: 8px;
+  }
+
+  .invitation-card__question {
+    margin-top: 10px;
+  }
+
+  .invitation-card__details {
+    margin: 14px 0;
+  }
+
+  .maybe-message-slot {
+    margin: 14px 0;
+  }
+
+  .invitation-actions {
+    display: flex;
+    min-height: 0;
+    padding-bottom: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .invitation-yes,
+  .invitation-maybe {
+    width: min(100%, 260px);
+  }
+
+  .invitation-maybe {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: rotate(0deg);
+  }
 }
 
 @media (pointer: fine) {
