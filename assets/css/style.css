@@ -682,6 +682,53 @@ body {
 .success-status { position: absolute; z-index: 10; bottom: 7%; max-width: 90%; color: rgba(248, 236, 200, 0.8); font: 400 clamp(0.72rem, 1.4vw, 0.9rem) "Jost", sans-serif; letter-spacing: 0.025em; opacity: 0; transform: translateY(12px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
 .success-status.is-visible { opacity: 1; transform: translateY(0); }
 
+/* ---------- responsive polish ---------- */
+.success-final { width: min(88%, 650px); gap: 0; }
+.success-final p { color: #f7f2ea; font: 500 clamp(1.2rem, 2.35vw, 1.5rem) "Cormorant Garamond", serif; line-height: 1.9; letter-spacing: 0.01em; }
+.success-final p:first-child,
+.success-final p:last-child { background: linear-gradient(180deg, #fff4d1 0%, #d4af37 56%, #f8ecc8 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: clamp(2rem, 4.1vw, 2.625rem); font-weight: 600; letter-spacing: 0.025em; text-shadow: 0 0 22px rgba(212, 175, 55, 0.22); }
+.success-final p:last-child { font-size: clamp(1.55rem, 3vw, 2rem); }
+.success-time { color: var(--gold-bright); font-weight: 600; text-shadow: 0 0 14px rgba(212, 175, 55, 0.24); }
+
+.message-screen--final,
+.final-stage { overflow: hidden; }
+.envelope-scene { max-width: 100%; }
+.envelope { max-width: 100%; }
+
+@media (max-width: 1024px) {
+  .card-wrap { width: min(96vw, 760px); padding: 16px; }
+  .card { min-height: min(560px, calc(100svh - 32px)); }
+  .message-screen { padding-right: clamp(24px, 6vw, 48px); padding-left: clamp(24px, 6vw, 48px); }
+  .invitation-card { max-width: calc(100% - 24px); }
+}
+
+@media (max-width: 480px) {
+  .card-wrap { width: 100%; padding: 8px; }
+  .card { min-height: min(500px, calc(100svh - 16px)); padding: 34px 18px 30px; border-radius: 22px; overflow: hidden; }
+  .title__hi { font-size: clamp(2.15rem, 12vw, 2.7rem); }
+  .title__name { font-size: clamp(4rem, 19vw, 5rem); }
+  .message-screen { padding: 26px 20px 24px; font-size: clamp(1.35rem, 6.1vw, 1.65rem); }
+  .message-screen__copy { gap: 14px; }
+  .message-next { width: 54px; height: 54px; }
+  .final-stage__eyebrow { top: 5%; font-size: clamp(1.45rem, 7vw, 2rem); }
+  .envelope-scene { gap: 12px; }
+  .envelope { width: min(80vw, 330px); }
+  .invitation-card { width: min(94%, 390px); max-height: calc(100% - 20px); padding: 23px 18px 20px; overflow: hidden; }
+  .invitation-card__details { margin: 16px 0; font-size: 0.82rem; }
+  .maybe-message-slot { min-height: 40px; margin: 18px 0; }
+  .maybe-escape-message { max-width: min(340px, calc(100% - 24px)); padding: 9px 14px; font-size: 0.7rem; }
+  .invitation-actions { padding-bottom: 72px; }
+  .invitation-maybe { bottom: 20px; }
+  .success-celebration { width: min(88%, 340px); }
+  .success-celebration p { font-size: clamp(3rem, 16vw, 4.2rem); }
+  .success-celebration span { font-size: clamp(1.35rem, 6.4vw, 1.8rem); }
+  .success-final { width: min(88%, 360px); }
+  .success-final p { font-size: clamp(1.08rem, 5.1vw, 1.28rem); line-height: 1.72; }
+  .success-final p:first-child { font-size: clamp(1.75rem, 8.1vw, 2.2rem); line-height: 1.35; }
+  .success-final p:last-child { font-size: clamp(1.4rem, 6.2vw, 1.7rem); }
+  .success-status { bottom: 6%; font-size: 0.67rem; }
+}
+
 @keyframes celebrationBounce { 0% { transform: scale(0.82) translateY(18px); } 64% { transform: scale(1.04) translateY(-4px); } 100% { transform: scale(1) translateY(0); } }
 @keyframes successLine { to { opacity: 1; transform: translateY(0); } }
 

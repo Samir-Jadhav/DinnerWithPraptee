@@ -130,7 +130,7 @@
   musicToggle?.addEventListener("click", () => {
     if (!music) return;
     if (music.paused) {
-      music.volume = 0.24;
+      music.volume = 0.18;
       music.play().then(() => {
         musicToggle.classList.add("is-playing");
         musicToggle.setAttribute("aria-pressed", "true");
