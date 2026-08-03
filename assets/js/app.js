@@ -300,18 +300,13 @@
     invitationCard?.setAttribute("aria-hidden", "false");
   });
 
-  const getMaybeViewportBounds = (buttonBounds) => {
-    const viewport = window.visualViewport;
+  const getMaybeViewportBounds = () => {
     const margin = 20;
-    const left = (viewport?.offsetLeft || 0) + margin;
-    const top = (viewport?.offsetTop || 0) + margin;
-    const width = viewport?.width || window.innerWidth;
-    const height = viewport?.height || window.innerHeight;
     return {
-      left,
-      top,
-      maxX: Math.max(left, left + width - buttonBounds.width - margin),
-      maxY: Math.max(top, top + height - buttonBounds.height - margin)
+      left: margin,
+      top: margin,
+      maxX: Math.max(margin, window.innerWidth - maybeButton.offsetWidth - margin),
+      maxY: Math.max(margin, window.innerHeight - maybeButton.offsetHeight - margin)
     };
   };
 
@@ -329,7 +324,7 @@
     maybeButton.style.zIndex = "20";
     maybeButton.style.transition = "left 300ms ease-out, top 300ms ease-out, transform 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out";
     const buttonBounds = maybeButton.getBoundingClientRect();
-    const viewportBounds = getMaybeViewportBounds(buttonBounds);
+    const viewportBounds = getMaybeViewportBounds();
     let x = 0;
     let y = 0;
     let foundPosition = false;
@@ -397,8 +392,7 @@
 
   const keepMaybeButtonInViewport = () => {
     if (!maybeButton || maybeButton.style.position !== "fixed") return;
-    const buttonBounds = maybeButton.getBoundingClientRect();
-    const viewportBounds = getMaybeViewportBounds(buttonBounds);
+    const viewportBounds = getMaybeViewportBounds();
     const x = Math.min(Math.max(viewportBounds.left, Number.parseFloat(maybeButton.style.left) || viewportBounds.left), viewportBounds.maxX);
     const y = Math.min(Math.max(viewportBounds.top, Number.parseFloat(maybeButton.style.top) || viewportBounds.top), viewportBounds.maxY);
     maybeButton.style.left = `${x}px`;

@@ -555,7 +555,7 @@ body {
 .invitation-yes { box-shadow: 0 0 14px rgba(212, 175, 55, 0.22); }
 .invitation-yes:hover,
 .invitation-yes:focus-visible { transform: translateY(-2px); background: rgba(255, 248, 222, 0.72); box-shadow: 0 0 22px rgba(212, 175, 55, 0.46); outline: none; }
-.invitation-maybe { position: absolute; z-index: 3; left: 50%; bottom: 30px; min-width: 132px; padding: 0 18px; transform: translateX(-50%) rotate(0deg); }
+.invitation-maybe { position: absolute; z-index: 3; left: 50%; bottom: 30px; width: auto; max-width: 170px; min-width: 0; min-height: 48px; height: 48px; padding: 12px 22px; font-size: 15px; transform: translateX(-50%) rotate(0deg); }
 .invitation-maybe.is-moving { box-shadow: 0 0 18px rgba(212, 175, 55, 0.48); }
 .invitation-maybe.is-bouncing { animation: maybeLanding 450ms var(--ease); }
 .maybe-message-slot { display: grid; min-height: 44px; margin: 30px 0; place-items: center; }
@@ -853,6 +853,12 @@ body {
     position: relative;
     left: auto;
     bottom: auto;
+    width: auto;
+    max-width: 140px;
+    min-height: 42px;
+    height: 42px;
+    padding: 10px 18px;
+    font-size: 14px;
     transform: rotate(0deg);
   }
 }
