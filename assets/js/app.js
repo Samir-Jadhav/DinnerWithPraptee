@@ -28,6 +28,7 @@
     success: document.querySelector("#sound-success")
   };
   let maybeCooldown = false;
+  let maybeNotAttempts = 0;
   let maybeMessageTimer;
   let lastMaybePosition;
   let maybeIsFloating = false;
@@ -128,6 +129,37 @@
     sound.volume = volume;
     sound.currentTime = 0;
     sound.play().catch(() => {});
+  };
+
+  const getDeviceType = () => {
+    const userAgent = navigator.userAgent || "";
+    const viewportWidth = window.innerWidth;
+
+    if (/iPad|Tablet|PlayBook|Silk\//i.test(userAgent) || (/Android/i.test(userAgent) && !/Mobile/i.test(userAgent))) return "Tablet";
+    if (navigator.userAgentData?.mobile || /Mobi|Android|iPhone|iPod/i.test(userAgent)) return "Mobile";
+    if (window.matchMedia("(pointer: coarse)").matches && viewportWidth <= 1024) {
+      return viewportWidth <= 767 ? "Mobile" : "Tablet";
+    }
+
+    return "Desktop";
+  };
+
+  const sendMaybeNotNotification = async (attempt) => {
+    try {
+      const response = await fetch("/api/sendMaybeNot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          attempt,
+          time: new Date().toISOString(),
+          device: getDeviceType()
+        })
+      });
+
+      if (!response.ok) throw new Error(`Maybe Not notification failed: ${response.status}`);
+    } catch (error) {
+      console.error("Unable to send Maybe Not notification.", error);
+    }
   };
 
   let musicRequested = false;
@@ -445,8 +477,10 @@
 
   maybeButton?.addEventListener("click", (event) => {
     event.preventDefault();
+    maybeNotAttempts += 1;
     playSound("click");
     moveMaybeButton();
+    void sendMaybeNotNotification(maybeNotAttempts);
   });
 
   backButton?.addEventListener("click", () => {
