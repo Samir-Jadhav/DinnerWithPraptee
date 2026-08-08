@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
         const body = req.body || {};
 
-        const message =
+        let message =
 `❤️ DINNER INVITATION ACCEPTED ❤️
 
 Praptee clicked YES! 😊
@@ -31,6 +31,23 @@ ${body.time}
 
 Time to get ready.`;
 
+        if (body.notificationType === "maybe-not") {
+            const allowedDevices = new Set(["Mobile", "Tablet", "Desktop"]);
+            const isValidAttempt = Number.isSafeInteger(body.attempt) && body.attempt > 0;
+
+            if (!isValidAttempt || !allowedDevices.has(body.device) || Number.isNaN(Date.parse(body.time))) {
+                return res.status(400).json({ error: "Invalid Maybe Not notification data" });
+            }
+
+            const formattedTime = new Intl.DateTimeFormat("en-IN", {
+                dateStyle: "full",
+                timeStyle: "medium",
+                timeZone: "Asia/Kolkata"
+            }).format(new Date(body.time));
+
+            message = `\u{1F49C} Maybe Not attempt #${body.attempt}\n\nPraptee tried to click "Maybe not."\n\nTime:\n${formattedTime} IST\n\nDevice:\n${body.device}`;
+        }
+
         const telegramURL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
         const response = await fetch(telegramURL, {
@@ -45,6 +62,11 @@ Time to get ready.`;
         });
 
         const result = await response.json();
+
+        if (body.notificationType === "maybe-not" && (!response.ok || !result.ok)) {
+            console.error("Telegram Maybe Not notification failed:", result);
+            return res.status(502).json({ success: false });
+        }
 
         return res.status(200).json(result);
 

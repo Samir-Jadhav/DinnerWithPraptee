@@ -146,10 +146,11 @@
 
   const sendMaybeNotNotification = async (attempt) => {
     try {
-      const response = await fetch("/api/sendMaybeNot", {
+      const response = await fetch("/api/sendTelegram", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          notificationType: "maybe-not",
           attempt,
           time: new Date().toISOString(),
           device: getDeviceType()
