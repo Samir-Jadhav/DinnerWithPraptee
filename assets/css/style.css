@@ -548,6 +548,8 @@ body {
 .invitation-card__message { margin-top: 12px; font: 500 clamp(1.25rem, 2.5vw, 1.55rem) "Cormorant Garamond", serif; line-height: 1.25; }
 .invitation-card__question { margin-top: 15px; color: #694c1e; font: 600 clamp(1.55rem, 3.2vw, 1.95rem) "Cormorant Garamond", serif; line-height: 1.15; }
 .invitation-card__details { display: grid; gap: 5px; margin: 22px 0; color: #5a4730; font: 400 0.94rem "Jost", sans-serif; }
+.invitation-card__details p:nth-child(4) { margin-top: 7px; }
+.invitation-card__details p:nth-child(5) { margin-top: 2px; }
 
 .invitation-actions { min-height: 50px; padding-bottom: 78px; display: grid; align-items: center; }
 .invitation-yes,
@@ -798,7 +800,7 @@ body {
     width: min(92vw, 520px);
     height: min(90svh, 100%);
     max-height: 90svh;
-    padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+    padding: 26px 18px calc(22px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -829,16 +831,29 @@ body {
     font-size: 0.74rem;
   }
 
+  .invitation-card__details p:nth-child(4) {
+    margin-top: 8px;
+  }
+
+  .invitation-card__details p:nth-child(5) {
+    margin-top: 3px;
+  }
+
   .maybe-message-slot {
     min-height: 32px;
     margin: 8px 0;
   }
 
+  .maybe-message-slot:has(.maybe-escape-message:not(.is-visible)) {
+    min-height: 0;
+    margin: 0;
+  }
+
   .invitation-actions {
     display: flex;
-    min-height: 100px;
-    padding-bottom: 0;
-    margin-top: auto;
+    min-height: 120px;
+    padding-bottom: 22px;
+    margin-top: 32px;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
