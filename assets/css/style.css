@@ -875,6 +875,51 @@ body {
   }
 }
 
+@media (max-width: 600px) {
+  .card:has(.final-stage.is-opened) {
+    min-height: min(560px, calc(100svh - 16px));
+    overflow: visible;
+  }
+
+  .invitation-card {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+    padding: 24px 18px 22px;
+  }
+
+  .invitation-card__dear {
+    margin-top: 20px;
+  }
+
+  .invitation-card__message {
+    margin-top: 16px;
+  }
+
+  .invitation-card__question {
+    margin-top: 21px;
+  }
+
+  .invitation-card__details {
+    margin: 22px 0 0;
+  }
+
+  .maybe-escape-message:not(.is-visible) {
+    display: none;
+  }
+
+  .maybe-message-slot {
+    display: contents;
+  }
+
+  .invitation-actions {
+    margin-top: 32px;
+    gap: 12px;
+    padding-bottom: 22px;
+  }
+}
+
 @media (pointer: fine) {
   body,
   button { cursor: none; }
