@@ -924,3 +924,35 @@ body {
   body,
   button { cursor: none; }
 }
+
+@media (max-width: 480px) {
+  .message-screen--final {
+    padding: 0;
+  }
+
+  .invitation-card {
+    padding: 20px 18px 18px;
+  }
+
+  .invitation-card__dear {
+    margin-top: 12px;
+  }
+
+  .invitation-card__message {
+    margin-top: 12px;
+  }
+
+  .invitation-card__question {
+    margin-top: 14px;
+  }
+
+  .invitation-card__details {
+    margin: 14px 0 0;
+  }
+
+  .invitation-actions {
+    margin-top: 22px;
+    gap: 12px;
+    padding-bottom: 18px;
+  }
+}
